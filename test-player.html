@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HLS Video Example</title>
+    <!-- Video.js CSS -->
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <!-- Video.js JavaScript -->
+    <script src="https://unpkg.com/video.js/dist/video.js"></script>
+</head>
+<body>
+
+<video
+    id="my_video_1"
+    class="video-js vjs-default-skin"
+    controls
+    preload="auto"
+    width="1280" height="720"
+    data-setup=''>>
+    <source src="http://127.0.0.1:5500/tmp/b39e457ee2a4ee81bf2fce4925cf3ef064f02be1/playlist.m3u8" type="application/x-mpegURL">
+</video>
+
+<!-- Initialize Video.js Player -->
+<script>
+  var player = videojs('my_video_1');
+  
+  // Assuming you want to configure the player further:
+  player.ready(function() {
+      // Example: Listen to specific events or configure UI components.
+      // This is where you'd implement any Video.js related initializations.
+      var audioTracks = player.audioTracks();
+      console.log('here',audioTracks)
+  if (audioTracks && audioTracks.length > 0) {
+    // Select the first audio track
+    audioTracks[0].enabled = true;
+  }
+      player.on('error', function() {
+        var error = player.error();
+        console.error('Video.js Error', error.code, error.message, error);
+        // Example of using the error object
+        // error.code: gives the error code
+        // error.message: gives the error message
+        // error: the complete error object for more details if needed
+    });
+  });
+  </script>
+
+</body>
+</html>
