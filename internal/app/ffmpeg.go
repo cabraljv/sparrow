@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 var FRAG_TIME = int64(5)
@@ -112,27 +111,24 @@ func GenerateFragments(downloadPath string, downloadedParts map[int64]bool, id s
 	}
 
 	startSec := int64(-1)
-	maxConcurrentFragments := 3
-	sem := make(chan struct{}, maxConcurrentFragments)
-	var wg sync.WaitGroup
-	var mu sync.Mutex
 	var errFragment error
 
+	processedFrags := 0
+
 	processFragment := func(startSec, duration int64) {
-		defer wg.Done()
-		defer func() { <-sem }()
-		localErr := generateFragment(id, videoFilePath, "./tmp/"+id+"/", startSec, duration)
+
+		hasGenerated, localErr := generateFragment(id, videoFilePath, "./tmp/"+id+"/", startSec, duration)
 		if localErr != nil {
-			mu.Lock()
 			errFragment = fmt.Errorf("error generating fragment: %v", localErr)
-			mu.Unlock()
+			return
 		}
 		localErr = updatePlaylistM3U8(id)
 		if localErr != nil {
-			mu.Lock()
 			errFragment = fmt.Errorf("error updating playlist.m3u8: %v", localErr)
 			fmt.Println("errFragment", errFragment)
-			mu.Unlock()
+		}
+		if hasGenerated {
+			processedFrags++
 		}
 	}
 
@@ -145,28 +141,23 @@ func GenerateFragments(downloadPath string, downloadedParts map[int64]bool, id s
 			}
 
 			if (sec+1)%FRAG_TIME == 0 {
-				sem <- struct{}{}
-				wg.Add(1)
-				go processFragment(startSec, FRAG_TIME)
+				processFragment(startSec, FRAG_TIME)
 				startSec = -1
 			}
 		} else {
 			if startSec != -1 && (sec-startSec)%FRAG_TIME != 0 {
-				sem <- struct{}{}
-				wg.Add(1)
-				go processFragment(startSec, sec-startSec)
+				processFragment(startSec, sec-startSec)
+				startSec = -1
 			}
-			startSec = -1
+		}
+		if processedFrags >= 4 {
+			break
 		}
 	}
 
 	if startSec != -1 && (length-startSec)%FRAG_TIME != 0 {
-		sem <- struct{}{}
-		wg.Add(1)
-		go processFragment(startSec, length-startSec)
+		processFragment(startSec, length-startSec)
 	}
-
-	wg.Wait()
 
 	if errFragment != nil {
 		return errFragment
@@ -216,11 +207,11 @@ func getGeneratedFragIndexes(id string) (fragIndexes []int, err error) {
 }
 
 // Function to run ffmpeg and generate the .ts fragment files and the .m3u8 playlist
-func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTime int64) error {
+func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTime int64) (bool, error) {
 	generatedFragIndexes, err := getGeneratedFragIndexes(id)
 
 	if err != nil {
-		return fmt.Errorf("failed to get generated fragment indexes: %v", err)
+		return false, fmt.Errorf("failed to get generated fragment indexes: %v", err)
 	}
 
 	endTime := startTime + fragTime - 1
@@ -228,11 +219,11 @@ func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTim
 
 	// verify if the fragment is already generated
 	if contains(generatedFragIndexes, int(correctFragIndex)) {
-		return nil
+		return false, nil
 	}
 	// verify if the fragment is already generated
 	if _, err := os.Stat(downloadPath + fmt.Sprintf("video%d.ts", correctFragIndex)); err == nil {
-		return nil
+		return false, nil
 	}
 
 	fmt.Printf("Generating fragment %v\n", correctFragIndex)
@@ -241,11 +232,11 @@ func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTim
 
 	// create dir if it doesn't exist
 	if err := os.MkdirAll(downloadPath, 0755); err != nil {
-		return fmt.Errorf("failed to create directory: %v", err)
+		return false, fmt.Errorf("failed to create directory: %v", err)
 	}
 
 	if err := os.MkdirAll(tmpGenerationDir, 0755); err != nil {
-		return fmt.Errorf("failed to create directory: %v", err)
+		return false, fmt.Errorf("failed to create directory: %v", err)
 	}
 	// Construct the ffmpeg command
 	ffmpegCmd := exec.Command("ffmpeg",
@@ -267,22 +258,22 @@ func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTim
 	// Execute the command
 	out, err := ffmpegCmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("ffmpeg error: %v, output: %s", err, string(out))
+		return false, fmt.Errorf("ffmpeg error: %v, output: %s", err, string(out))
 	}
 
 	// add fragment index to generated fragments txt
 	generatedTxtPath := "./tmp/" + id + "/generated.txt"
 	generatedTxt, err := os.OpenFile(generatedTxtPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return fmt.Errorf("failed to open generated.txt file: %v", err)
+		return false, fmt.Errorf("failed to open generated.txt file: %v", err)
 	}
 	defer generatedTxt.Close()
 
 	_, err = generatedTxt.WriteString(fmt.Sprintf("%v\n", float64(correctFragIndex)))
 	if err != nil {
-		return fmt.Errorf("failed to write fragment duration: %v", err)
+		return false, fmt.Errorf("failed to write fragment duration: %v", err)
 	}
-	return nil
+	return true, nil
 }
 
 func getFragIndexesFromM3u8(m3u8Path string) (frags []int, err error) {

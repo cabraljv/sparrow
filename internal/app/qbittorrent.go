@@ -246,7 +246,7 @@ func isTorrentAlreadyAdded(client *http.Client, magnetURI string) bool {
 func addTorrent(client *http.Client, magnetURI string) error {
 	fmt.Println("Starting torrent download...")
 	uri := qbittorrentURL + "/api/v2/torrents/add"
-	data := fmt.Sprintf("urls=%s", magnetURI)
+	data := fmt.Sprintf("urls=%s&sequentialDownload=true", magnetURI)
 
 	req, err := http.NewRequest("POST", uri, bytes.NewBuffer([]byte(data)))
 	if err != nil {
