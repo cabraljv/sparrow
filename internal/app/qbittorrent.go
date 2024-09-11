@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"bytes"
@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"slices"
+	"sparrow/models"
 	"strings"
 )
 
@@ -263,4 +265,19 @@ func addTorrent(client *http.Client, magnetURI string) error {
 	}
 
 	return nil
+}
+
+func VerifyBestTorrent(torrents []models.AvailableTorrent) (bestTorrent models.AvailableTorrent) {
+	for _, torrent := range torrents {
+		tags := strings.Split(torrent.BehaviorHints.BingeGroup, "|")
+		if slices.Contains(tags, "1080p") {
+			bestTorrent = torrent
+			return
+		}
+	}
+	return
+}
+
+func GenerateMagnetURI(hash string) string {
+	return fmt.Sprintf("magnet:?xt=urn:btih:%s", hash)
 }

@@ -1,4 +1,4 @@
-package main
+package app
 
 func GetDownloadedVideoParts(pieces []int16, videoLength int64) (downloadedParts map[int64]bool, err error) {
 	// Initialize the map to store the download status of each second of the video

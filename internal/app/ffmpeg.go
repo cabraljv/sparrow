@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"bufio"
@@ -270,21 +270,6 @@ func generateFragment(id, videoFilePath, downloadPath string, startTime, fragTim
 	if err != nil {
 		return fmt.Errorf("failed to write fragment duration: %v", err)
 	}
-
-	// remove all files in the directory
-	// for _, file := range files {
-	// 	err = os.Remove(tmpGenerationDir + file.Name())
-	// 	if err != nil {
-	// 		return fmt.Errorf("failed to remove file: %v", err)
-	// 	}
-	// }
-
-	// // remove the directory
-	// err = os.Remove(tmpGenerationDir)
-	// if err != nil {
-	// 	return fmt.Errorf("failed to remove directory: %v", err)
-	// }
-
 	return nil
 }
 
@@ -391,6 +376,12 @@ func transferAndAppendFrag(id string, fragIndex int) error {
 	_, err = playlistFile.WriteString("#EXT-X-DISCONTINUITY\n")
 	if err != nil {
 		return fmt.Errorf("failed to write fragment file name: %v", err)
+	}
+
+	// remove the fragment directory
+	err = os.RemoveAll(tmpGenerationDir)
+	if err != nil {
+		return fmt.Errorf("failed to remove directory: %v", err)
 	}
 
 	return nil

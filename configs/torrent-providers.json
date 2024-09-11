@@ -1,0 +1,337 @@
+[
+  {
+    "transportUrl": "https://watchhub.strem.io/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "org.stremio.watchhub",
+      "logo": "https://www.strem.io/images/watchhub-logo.png",
+      "version": "1.15.0",
+      "name": "WatchHub",
+      "description": "Find where to stream your favorite movies and shows amongst Netflix, iTunes, Hulu, Amazon, HBO GO and many others. Supports many countries.",
+      "resources": [
+        "stream"
+      ],
+      "types": [
+        "movie",
+        "series"
+      ],
+      "catalogs": [],
+      "idPrefixes": [
+        "tt"
+      ]
+    },
+    "flags": {
+      "official": true
+    }
+  },
+  {
+    "transportUrl": "https://caching.stremio.net/publicdomainmovies.now.sh/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "org.stremio.pubdomainmovies",
+      "version": "1.0.0",
+      "logo": "https://johnserv531.github.io/gh-images/1586344884.jpg",
+      "name": "Public Domain Movies",
+      "description": "Torrents for public domain movies. Includes a collection of more then 500 public domain movies.",
+      "resources": [
+        "catalog",
+        "stream"
+      ],
+      "types": [
+        "movie"
+      ],
+      "catalogs": [
+        {
+          "type": "movie",
+          "id": "publicdomainmovies",
+          "extra": [
+            {
+              "name": "skip"
+            },
+            {
+              "name": "search"
+            }
+          ]
+        }
+      ],
+      "idPrefixes": [
+        "tt"
+      ]
+    },
+    "flags": {
+      "official": true
+    }
+  },
+  {
+    "transportUrl": "https://opensubtitles.strem.io/stremio/v1",
+    "transportName": "",
+    "manifest": {
+      "id": "org.stremio.opensubtitles",
+      "version": "0.24.0",
+      "name": "OpenSubtitles",
+      "description": "The official add-on for subtitles from OpenSubtitles",
+      "logo": "http://www.strem.io/images/addons/opensubtitles-logo.png",
+      "resources": [
+        "subtitles"
+      ],
+      "types": [
+        "series",
+        "movie",
+        "other"
+      ],
+      "catalogs": []
+    },
+    "flags": {
+      "official": true
+    }
+  },
+  {
+    "transportUrl": "https://torrentio.strem.fun/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy,magnetdl,horriblesubs,nyaasi,comando,bludv/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "com.stremio.torrentio.addon",
+      "version": "0.0.13",
+      "name": "Torrentio",
+      "description": "Provides torrent streams from scraped torrent providers. Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), MagnetDL(+), HorribleSubs(+), NyaaSi(+), Rutor(-), Rutracker(-), Comando(+), BluDV(+), Torrent9(-), MejorTorrent(-), Cinecalidad(-). To configure providers, RealDebrid/Premiumize/AllDebrid/DebridLink/Offcloud/Put.io support and other settings visit https://torrentio.strem.fun",
+      "catalogs": [],
+      "resources": [
+        {
+          "name": "stream",
+          "types": [
+            "movie",
+            "series"
+          ],
+          "idPrefixes": [
+            "tt",
+            "kitsu"
+          ]
+        }
+      ],
+      "types": [
+        "movie",
+        "series",
+        "anime",
+        "other"
+      ],
+      "background": "https://i.ibb.co/VtSfFP9/t8wVwcg.jpg",
+      "logo": "https://i.ibb.co/w4BnkC9/GwxAcDV.png",
+      "behaviorHints": {
+        "configurable": true,
+        "configurationRequired": false
+      }
+    },
+    "flags": {}
+  },
+  {
+    "transportUrl": "https://thepiratebay-plus.strem.fun/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "com.stremio.thepiratebay.plus",
+      "version": "1.4.0",
+      "name": "ThePirateBay+",
+      "description": "Search for movies, series and anime from ThePirateBay",
+      "catalogs": [],
+      "resources": [
+        "stream"
+      ],
+      "types": [
+        "movie",
+        "series"
+      ],
+      "idPrefixes": [
+        "tt"
+      ],
+      "background": "https://i.imgur.com/t8wVwcg.jpg",
+      "logo": "https://i.imgur.com/dPa2clS.png"
+    },
+    "flags": {}
+  },
+  {
+    "transportUrl": "https://94c8cb9f702d-brazuca-torrents.baby-beamup.club/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "com.stremio.brazuca.addon",
+      "version": "0.0.3",
+      "name": "Brazuca Torrents",
+      "description": "Fornece streams de filmes e series dublados de provedores de torrent. Suporta atualmente AdoroCinema(+), BluDV(+), Comando(+), ComoEuBaixo(+), DarkMahou(+), EraiRaws(+), Keroseed(+), Lapumia(+), NyaaSi(+), OndeBaixa(+), ShinMeikai(+), TorrentDosFilmes(+), VacaTorrent(+). (This addon was made based on Torrentio, all credits are to its creator).",
+      "catalogs": [],
+      "resources": [
+        {
+          "name": "stream",
+          "types": [
+            "movie",
+            "series"
+          ],
+          "idPrefixes": [
+            "tt",
+            "kitsu"
+          ]
+        }
+      ],
+      "types": [
+        "movie",
+        "series",
+        "other"
+      ],
+      "background": "https://i.imgur.com/QnbEGow.png",
+      "logo": "https://i.imgur.com/KVpfrAk.png"
+    },
+    "flags": {}
+  },
+  {
+    "transportUrl": "https://27a5b2bfe3c0-stremio-brazilian-addon.baby-beamup.club/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "resources": [
+        "catalog",
+        "stream"
+      ],
+      "types": [
+        "movie"
+      ],
+      "idPrefixes": [
+        "tt"
+      ],
+      "_id": "5ea0fe827b4eda380cc2032d",
+      "id": "brazilian-addon",
+      "name": "Mico-Leão Dublado 🇧🇷",
+      "logo": "https://i.ibb.co/YyPbHVT/icon.png",
+      "version": "1.0.0",
+      "description": "Assista a FILMES dublados em português de GRAÇA! HD e FULLHD!",
+      "catalogs": [
+        {
+          "genres": [
+            "Ação",
+            "Animação",
+            "Aventura",
+            "Clássico",
+            "Comédia",
+            "Documentário",
+            "Drama",
+            "Fantasia",
+            "Ficção",
+            "Faroeste",
+            "Guerra",
+            "Músicas",
+            "Nacional",
+            "Policial",
+            "Romance",
+            "Suspense",
+            "Terror"
+          ],
+          "extraSupported": [
+            "search",
+            "genre",
+            "skip"
+          ],
+          "_id": "5ea0fe817b4eda380cc2032b",
+          "type": "movie",
+          "id": "BrazilianCatalog",
+          "name": "Filmes Dublados",
+          "__v": 0
+        }
+      ],
+      "__v": 0
+    },
+    "flags": {}
+  },
+  {
+    "transportUrl": "https://torrentio.strem.fun/brazuca/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "com.stremio.torrentio.brazuca.addon",
+      "version": "0.0.13",
+      "name": "Torrentio Brazuca",
+      "description": "Preconfigured version of Torrentio addon for Brazilian content. To configure advanced options visit https://torrentio.strem.fun/brazuca",
+      "catalogs": [],
+      "resources": [
+        {
+          "name": "stream",
+          "types": [
+            "movie",
+            "series"
+          ],
+          "idPrefixes": [
+            "tt",
+            "kitsu"
+          ]
+        }
+      ],
+      "types": [
+        "movie",
+        "series",
+        "anime",
+        "other"
+      ],
+      "background": "https://i.ibb.co/VtSfFP9/t8wVwcg.jpg",
+      "logo": "https://i.ibb.co/8mgRZPp/GwxAcDV.png",
+      "behaviorHints": {
+        "configurable": true,
+        "configurationRequired": false
+      }
+    },
+    "flags": {}
+  },
+  {
+    "transportUrl": "https://opensubtitles-v3.strem.io/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "org.stremio.opensubtitlesv3",
+      "version": "1.0.0",
+      "name": "OpenSubtitles v3",
+      "catalogs": [],
+      "resources": [
+        "subtitles"
+      ],
+      "types": [
+        "movie",
+        "series"
+      ],
+      "idPrefixes": [
+        "tt"
+      ]
+    },
+    "flags": {
+      "official": true
+    }
+  },
+  {
+    "transportUrl": "http://127.0.0.1:11470/local-addon/manifest.json",
+    "transportName": "",
+    "manifest": {
+      "id": "org.stremio.local",
+      "version": "1.10.0",
+      "description": "Local add-on to find playable files: .torrent, .mp4, .mkv and .avi",
+      "name": "Local Files (without catalog support)",
+      "resources": [
+        {
+          "name": "meta",
+          "types": [
+            "other"
+          ],
+          "idPrefixes": [
+            "local:",
+            "bt:"
+          ]
+        },
+        {
+          "name": "stream",
+          "types": [
+            "movie",
+            "series"
+          ],
+          "idPrefixes": [
+            "tt"
+          ]
+        }
+      ],
+      "types": [
+        "movie",
+        "series",
+        "other"
+      ],
+      "catalogs": []
+    },
+    "flags": {}
+  }
+]
