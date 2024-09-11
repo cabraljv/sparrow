@@ -8,30 +8,39 @@ import (
 	"time"
 )
 
-type AvailableTorrent struct {
-	ImdbID        string
-	Provider      string
-	InfoHash      string
-	BehaviorHints BehaviorHints
-}
-
 type BehaviorHints struct {
 	BingeGroup string `json:"bingeGroup"`
 	Filename   string `json:"filename"`
 }
 
-func (a *AvailableTorrent) Scan(value interface{}) error {
-	bytes, ok := value.([]byte)
-	if !ok {
-		return errors.New("Failed to unmarshal JSON value for AvailableTorrent")
-	}
-
-	result := json.Unmarshal(bytes, &a)
-	return result
+type AvailableTorrent struct {
+	ImdbID     string
+	Provider   string
+	InfoHash   string
+	BingeGroup string
+	Filename   string
 }
 
-func (a AvailableTorrent) Value() (driver.Value, error) {
-	return json.Marshal(a)
+type JSONAvailableTorrents []AvailableTorrent
+
+func (j JSONAvailableTorrents) Value() (driver.Value, error) {
+	if len(j) == 0 {
+		return nil, nil
+	}
+	return json.Marshal(j)
+}
+
+func (j *JSONAvailableTorrents) Scan(value interface{}) error {
+	if value == nil {
+		*j = make(JSONAvailableTorrents, 0)
+		return nil
+	}
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &j)
 }
 
 type Media struct {
@@ -42,10 +51,10 @@ type Media struct {
 	Description         string
 	Poster              string
 	Year                string
-	CurrentDownloadHash sql.NullString
-	AvailableTorrents   []AvailableTorrent `gorm:"type:json"`
-	CreatedAt           time.Time
-	UpdatedAt           time.Time
+	CurrentDownloadHash sql.NullString        `gorm:"type:varchar(255)"`
+	AvailableTorrents   JSONAvailableTorrents `gorm:"type:json"`
+	CreatedAt           time.Time             `gorm:"autoCreateTime"`
+	UpdatedAt           time.Time             `gorm:"autoUpdateTime"`
 }
 
 type MediaIMDB struct {
@@ -54,9 +63,4 @@ type MediaIMDB struct {
 	ImdbID string `json:"imdbID"`
 	Type   string `json:"type"`
 	Poster string `json:"poster"`
-}
-
-type QueueItem struct {
-	ImdbID string
-	Hash   string
 }

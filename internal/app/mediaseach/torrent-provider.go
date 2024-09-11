@@ -135,13 +135,11 @@ func searchTorrentOnProvider(provider TorrentProvider, media models.Media) (torr
 
 	for i, stream := range responseData.Streams {
 		torrents[i] = models.AvailableTorrent{
-			InfoHash: stream.InfoHash,
-			Provider: provider.Manifest.Id,
-			ImdbID:   media.ImdbID,
-			BehaviorHints: models.BehaviorHints{
-				BingeGroup: stream.BehaviorHints.BingeGroup,
-				Filename:   stream.BehaviorHints.Filename,
-			},
+			InfoHash:   stream.InfoHash,
+			Provider:   provider.Manifest.Id,
+			ImdbID:     media.ImdbID,
+			BingeGroup: stream.BehaviorHints.BingeGroup,
+			Filename:   stream.BehaviorHints.Filename,
 		}
 	}
 

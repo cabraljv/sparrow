@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-var FRAG_TIME = int64(12)
+var FRAG_TIME = int64(5)
 
 func getVideoFileByDownloadPath(downloadPath string) (filePath string, err error) {
 	info, err := os.Stat(downloadPath)
@@ -23,7 +23,20 @@ func getVideoFileByDownloadPath(downloadPath string) (filePath string, err error
 		return
 	}
 	if info.IsDir() {
-		// TO DO
+		files, err := os.ReadDir(downloadPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to read directory: %v", err)
+		}
+		for _, file := range files {
+			if strings.HasSuffix(file.Name(), ".mp4") {
+				filePath = downloadPath + "/" + file.Name()
+				break
+			}
+			if strings.HasSuffix(file.Name(), ".mkv") {
+				filePath = downloadPath + file.Name()
+				break
+			}
+		}
 	} else {
 		filePath = downloadPath
 	}
@@ -42,7 +55,6 @@ func GetVideoLength(downloadPath string) (length int64, err error) {
 	cmd.Stdout = &out
 
 	if err := cmd.Run(); err != nil {
-		fmt.Println("erraa", err)
 		return 0, err
 	}
 
@@ -100,7 +112,7 @@ func GenerateFragments(downloadPath string, downloadedParts map[int64]bool, id s
 	}
 
 	startSec := int64(-1)
-	maxConcurrentFragments := 1
+	maxConcurrentFragments := 3
 	sem := make(chan struct{}, maxConcurrentFragments)
 	var wg sync.WaitGroup
 	var mu sync.Mutex

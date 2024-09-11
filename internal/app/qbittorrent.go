@@ -269,7 +269,7 @@ func addTorrent(client *http.Client, magnetURI string) error {
 
 func VerifyBestTorrent(torrents []models.AvailableTorrent) (bestTorrent models.AvailableTorrent) {
 	for _, torrent := range torrents {
-		tags := strings.Split(torrent.BehaviorHints.BingeGroup, "|")
+		tags := strings.Split(torrent.BingeGroup, "|")
 		if slices.Contains(tags, "1080p") {
 			bestTorrent = torrent
 			return

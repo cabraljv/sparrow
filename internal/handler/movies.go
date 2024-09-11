@@ -6,7 +6,6 @@ import (
 	"sparrow/internal/app/database"
 	"sparrow/internal/app/mediaseach"
 	"sparrow/models"
-	"sparrow/pkg"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -111,7 +110,7 @@ func GetMovieDataHandler(c *gin.Context) {
 
 	mediaToSave.AvailableTorrents = availableTorrents
 
-	database.SaveMedia(&mediaToSave)
+	database.SaveMedia(mediaToSave)
 
 	c.JSON(200, mediaToSave)
 
@@ -143,6 +142,31 @@ func StartMediaWatcher(c *gin.Context) {
 		return
 	}
 
+	// verify if media is already in the queue
+	existentQueueItem, err := database.GetQueueItem(media.ImdbID)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if existentQueueItem.ImdbID != "" {
+		if existentQueueItem.Status == "downloading" {
+			c.JSON(200, gin.H{
+				"message": "media already downloading",
+				"hash":    existentQueueItem.Hash,
+			})
+			return
+		}
+		database.UpdateQueueItemStatus(existentQueueItem.ImdbID, "waiting")
+		c.JSON(200, gin.H{
+			"message": "media added to queue",
+			"hash":    existentQueueItem.Hash,
+		})
+		return
+	}
+
 	bestTorrent := app.VerifyBestTorrent(media.AvailableTorrents)
 
 	fmt.Println("Best torrent found: ", media)
@@ -154,13 +178,27 @@ func StartMediaWatcher(c *gin.Context) {
 		return
 	}
 
-	pkg.PushItemToQueue(models.QueueItem{
-		ImdbID: bestTorrent.ImdbID,
-		Hash:   bestTorrent.InfoHash,
-	})
+	existentQueueItem, err = database.GetQueueItem(bestTorrent.ImdbID)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	queueItem := models.QueueItem{
+		ImdbID:    bestTorrent.ImdbID,
+		Hash:      bestTorrent.InfoHash,
+		Status:    "waiting",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	database.PushItemToQueue(queueItem)
 
 	c.JSON(200, gin.H{
 		"message": "media added to queue",
+		"hash":    bestTorrent.InfoHash,
 	})
 
 }

@@ -1,3 +1,4 @@
 tmp/
 downloads/
 config/
+*.db

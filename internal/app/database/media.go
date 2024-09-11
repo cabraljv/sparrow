@@ -8,12 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveMedia(media *models.Media) (err error) {
+func SaveMedia(media models.Media) (err error) {
 	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 	if err != nil {
 		return
 	}
 	db.AutoMigrate(&models.Media{})
+
 	if err := db.Create(media).Error; err != nil {
 		return err
 	}
