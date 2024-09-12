@@ -11,3 +11,17 @@ Sparrow (from Jack Sparrow the pirate) is a web app that allows users to search 
 - [x] Try to watch an available movie starting the torrent download, encoding it to hls and serving it to the user
 - [ ] Save data to continue watching a movie later
 
+
+
+## Current development status
+- Home page:
+
+<img src="docs/homepage.png" alt="Home page" style="max-width: 700px;" />
+
+- Movie page:
+
+<img src="docs/moviepage.png" alt="Movie page" style="max-width: 700px" />
+
+- Player:
+
+<img src="docs/player.png" alt="Player" style="max-width: 700px" />
