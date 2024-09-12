@@ -6,7 +6,7 @@ Sparrow (from Jack Sparrow the pirate) is a web app that allows users to search 
 
 ## Frontend
 
-The app frontend is built with Vue.js and Vuetify. It is available in the [frontend directory](https://github.com/cabraljv/sparrow-frontend).
+The frontend app is built with Vue.js and Vuetify. It is available in the [frontend repository](https://github.com/cabraljv/sparrow-frontend).
 
 
 ## Features
