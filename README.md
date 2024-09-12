@@ -1,7 +1,7 @@
 # Sparrow
 
 
-Sparrow (from Jack Sparrow the pirate) is a web app that allows users to search for movies and TV shows with torrents and watch them from a frontend web interface (TODO) by using the hls protocol.
+Sparrow (from Jack Sparrow the pirate) is a web app that allows users to search for movies and TV shows with torrents and watch them through a frontend web interface (TODO) using the HLS protocol. It has quite similar features to Stremio, but the game-changer is that it can run in a Docker container anywhere (cloud or home server) and the web app can be accessed from anywhere (mobile, TV, console...).
 
 
 ## Frontend
