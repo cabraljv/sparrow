@@ -4,6 +4,11 @@
 Sparrow (from Jack Sparrow the pirate) is a web app that allows users to search for movies and TV shows with torrents and watch them from a frontend web interface (TODO) by using the hls protocol.
 
 
+## Frontend
+
+The app frontend is built with Vue.js and Vuetify. It is available in the [frontend directory](https://github.com/cabraljv/sparrow-frontend).
+
+
 ## Features
 - [x] Search movies by title (currently using the OMDB API)
 - [ ] Get more information about a movie (description, rating, casting, etc)
